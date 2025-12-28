@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вступай в лучшую армию GTA 5 RP - La Puerta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('https://i.imgur.com/5Q8Z8ZJ.jpg'); /* Фон с армией GTA 5 RP */
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+        h1, h2 {
+            text-align: center;
+            color: #FFD700;
+        }
+        p {
+            text-align: center;
+            font-size: 18px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, textarea {
+            padding: 10px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.9);
+            color: black;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+            background: #FFD700;
+            color: black;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #FFA500;
+        }
+        .admin-panel {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 0, 0, 0.5);
+            border-radius: 10px;
+        }
+        .applications {
+            margin-top: 20px;
+        }
+        .application {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .header {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        .header button {
+            padding: 5px 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: 1px solid #FFD700;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .header button:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            border-radius: 10px;
+            color: black;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .nav {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 15px;
+        }
+        .nav a {
+            color: white;
+            text-decoration: none;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #FFD700;
+        }
+        .nav a:hover {
+            background: rgba(0, 0, 0, 0.9);
+        }
+        .status {
+            font-weight: bold;
+            color: #FFD700;
+        }
+        .bg-upload {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .admin-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 300px;
+        }
+        .page {
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <a href="#" onclick="showPage('home')">Главная</a>
+        <a href="#" onclick="showPage('about')">О нас</a>
+        <a href="#" onclick="showPage('contact')">Контакты</a>
+    </nav>
+
+    <div class="header">
+        <button id="registerBtn">Регистрация</button>
+        <button id="loginBtn">Войти</button>
+    </div>
+
+    <!-- Модальное окно регистрации -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeRegister">&times;</span>
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <label for="regName">Имя пользователя:</label>
+                <input type="text" id="regName" name="regName" required>
+
+                <label for="regPass">Пароль:</label>
+                <input type="password" id="regPass" name="regPass" required>
+
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+            <div id="regMessage" style="margin-top: 10px; display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Модальное окно входа -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLogin">&times;</span>
+            <h2>Вход</h2>
+            <form id="loginForm">
+                <label for="loginName">Имя пользователя:</label>
+                <input type="text" id="loginName" name="loginName" required>
+
+                <label for="loginPass">Пароль:</label>
+                <input type="password" id="loginPass" name="loginPass" required>
+
+                <button type="submit">Войти</button>
+            </form>
+            <div id="loginMessage" style="margin-top: 10px; display: none;"></div>
+        </div>
+    </div>
+
+    <div id="home" class="page">
+        <div class="container">
+            <h1>Вступай в лучшую армию в GTA 5 RP на штате La Puerta!</h1>
+            <p>Присоединяйся к элите! Мы - самая дисциплинированная и мощная армия на сервере. Защищай штат, участвуй в миссиях и становись героем!</p>
+
+            <!-- Заявка -->
+            <h2>Оставить заявку</h2>
+            <form id="applicationForm">
+                <label for="name">Ваше имя в игре:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="age">Ваш возраст:</label>
+                <input type="number" id="age" name="age" required>
+
+                <label for="experience">Опыт в RP (укажите серверы, роли и т.д.):</label>
+                <textarea id="experience" name="experience" rows="4" required></textarea>
+
+                <label for="reason">Почему вы хотите вступить в нашу армию?</label>
+                <textarea id="reason" name="reason" rows="4" required></textarea>
+
+                <label for="contact">Контакт для связи (Discord, VK и т.д.):</label>
+                <input type="text" id="contact" name="contact" required>
+
+                <button type="submit">Отправить заявку</button>
+            </form>
+
+            <div id="message" style="margin-top: 20px; display: none;">
+                <p>Спасибо за заявку! Мы рассмотрим её в ближайшее время.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Страница О нас -->
+    <div id="about" class="page" style="display: none;">
+        <div class="container">
+            <h1>О нас</h1>
+            <p>Мы - лучшая армия в GTA 5 RP на штате La Puerta! Наша команда состоит из самых дисциплинированных и опытных игроков, готовых защищать штат от любых угроз. Мы участвуем в эпичных миссиях, строим крепкие альянсы и создаем незабываемые моменты в игре. Присоединяйся к нам, и стань частью легенды!</p>
+            <p>Наши достижения: сотни успешных операций, лояльные союзники и репутация непобедимых. Мы гордимся каждым членом и стремимся к совершенству! Армия La Puerta - это не просто фракция, это семья, где каждый важен и ценен.</p>
+        </div>
+    </div>
+
+    <!-- Страница Контакты -->
+    <div id="contact" class="page" style="display: none;">
+        <div class="container">
+            <h1>Контакты</h1>
+            <p>Свяжитесь с нами для вступления или вопросов:</p>
+            <p>Discord: army@discord.com</p>
+            <p>VK: vk.com/armylaPuerta</p>
+            <p>Или оставьте заявку на главной странице!</p>
+        </div>
+    </div>
+
+    <!-- Загрузка фона (только для админа) -->
+    <div id="bgUpload" class="bg-upload" style="display: none;">
+        <h2>Загрузить новый фон</h2>
+        <input type="file" id="bgFile" accept="image/*">
+        <button id="setBgBtn">Установить как фон</button>
+    </div>
+
+    <!-- Админ панель -->
+    <div id="adminPanel" class="admin-panel" style="display: none;">
+        <h2>Админ панель</h2>
+        <div class="applications">
+            <h3>Заявки:</h3>
+            <div id="applicationsList"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+        let applications = JSON.parse(localStorage.getItem('applications')) || [];
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(page).style.display = 'block';
+        }
+
+        // Модальные окна
+        const registerBtn = document.getElementById('registerBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const registerModal = document.getElementById('registerModal');
+        const loginModal = document.getElementById('loginModal');
+        const closeRegister = document.getElementById('closeRegister');
+        const closeLogin = document.getElementById('closeLogin');
+
+        registerBtn.onclick = function() {
+            registerModal.style.display = 'block';
+        }
+        loginBtn.onclick = function() {
+            loginModal.style.display = 'block';
+        }
+        closeRegister.onclick = function() {
+            registerModal.style.display = 'none';
+        }
+        closeLogin.onclick = function() {
+            loginModal.style.display = 'none';
+        }
+        window.onclick = function(event) {
+            if (event.target == registerModal) {
+                registerModal.style.display = 'none';
+            }
+            if (event.target == loginModal) {
+                loginModal.style.display = 'none';
+            }
+        }
+
+        // Регистрация
+        const registerForm = document.getElementById('registerForm');
+        const regMessage = document.getElementById('regMessage');
+
+        registerForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('regName').value;
+            const pass = document.getElementById('regPass').value;
+            if (users.find(u => u.name === name)) {
+                regMessage.textContent = 'Пользователь уже существует!';
+                regMessage.style.color = 'red';
+            } else {
+                users.push({ name, pass });
+                localStorage.setItem('users', JSON.stringify(users));
+                regMessage.textContent = 'Регистрация успешна!';
+                regMessage.style.color = 'green';
+                registerModal.style.display = 'none';
+            }
+            regMessage.style.display = 'block';
+            registerForm.reset();
+        });
+
+        // Логин
+        const loginForm = document.getElementById('loginForm');
+        const loginMessage = document.getElementById('loginMessage');
+
+        loginForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const name = document.getElementById('loginName').value;
+            const pass = document.getElementById('loginPass').value;
+            const user = users.find(u => u.name === name && u.pass === pass);
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                loginMessage.textContent = 'Вход успешен!';
+                loginMessage.style.color = 'green';
+                if (name === 'MrRamazan' && pass === '228228') {
+                    document.getElementById('adminPanel').style.display = 'block';
+                    document.getElementById('bgUpload').style.display = 'block';
+                    displayApplications();
+                }
+                loginModal.style.display = 'none';
+            } else {
+                loginMessage.textContent = 'Неверные данные!';
+                loginMessage.style.color = 'red';
+            }
+            loginMessage.style.display = 'block';
+            loginForm.reset();
+        });
+
+        // Заявка
+        const form = document.getElementById('applicationForm');
+        const message = document.getElementById('message');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const app = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                experience: document.getElementById('experience').value,
+                reason: document.getElementById('reason').value,
+                contact: document.getElementById('contact').value,
+                status: 'pending'
+            };
+            applications.push(app);
+            localStorage.setItem('applications', JSON.stringify(applications));
+            message.style.display = 'block';
+            form.reset();
+            if (currentUser && currentUser.name === 'MrRamazan') {
+                displayApplications();
+            }
+        });
+
+        // Загрузка фона
+        const bgFile = document.getElementById('bgFile');
+        const setBgBtn = document.getElementById('setBgBtn');
+
+        setBgBtn.addEventListener('click', function() {
+            const file = bgFile.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.body.style.backgroundImage = `url(${e.target.result})`;
+                    localStorage.setItem('background', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Загрузка сохраненного фона
+        const savedBg = localStorage.getItem('background');
+        if (savedBg) {
+            document.body.style.backgroundImage = `url(${savedBg})`;
+        }
+
+        // Проверка сохраненного пользователя
+        if (currentUser && currentUser.name === 'MrRamazan') {
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('bgUpload').style.display = 'block';
+            displayApplications();
+        }
+
+        // Отображение заявок для админа
+        function displayApplications() {
+            const list = document.getElementById('applicationsList');
+            list.innerHTML = '';
+            applications.forEach((app, index) => {
+                const div = document.createElement('div');
+                div.className = 'application';
+                let statusText = '';
+                if (app.status === 'accepted') statusText = 'Принята';
+                else if (app.status === 'pending') statusText = 'Ожидает';
+                else statusText = 'Отклонена';
+                div.innerHTML = `
+                    <strong>${app.name}</strong> (Возраст: ${app.age})<br>
+                    Опыт: ${app.experience}<br>
+                    Причина: ${app.reason}<br>
+                    Контакт: ${app.contact}<br>
+                    <span class="status">Статус: ${statusText}</span><br>
+                    <button onclick="acceptApplication(${index})">Принять</button>
+                    <button onclick="deleteApplication(${index})">Удалить</button>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function acceptApplication(index) {
+            applications[index].status = 'accepted';
+            localStorage.setItem('applications', JSON.stringify(applications));
+            displayApplications();
+        }
+
+        function deleteApplication(index) {
+            applications.splice(index, 1);
+            localStorage.setItem('applications', JSON.stringify(applications));
+            displayApplications();
+        }
+    </script>
+</body>
+</html>
